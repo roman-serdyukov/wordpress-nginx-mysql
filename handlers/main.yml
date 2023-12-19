@@ -1,0 +1,32 @@
+---
+# handlers file for apps-server
+- name: Nginx start
+  become: true
+  ansible.builtin.systemd:
+    state: started
+    name: nginx
+    
+- name: Nginx reload
+  become: true
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: yes
+    name: nginx
+
+- name: php5-fpm start
+  become: true
+  service: 
+    name: php5-fpm 
+    state: started
+
+- name: php5-fpm restart 
+  become: true
+  service: 
+    name: php5-fpm 
+    state: restarted
+
+- name: Restart mysql
+  become: true
+  service:
+    name: mysql
+    state: restarted

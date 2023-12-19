@@ -1,0 +1,24 @@
+# Task for install certbot & create certificate
+
+- name: Nginx cert | Install letsencrypt
+  become: True
+  ansible.builtin.apt:
+    name: certbot
+    state: latest
+
+- name: Nginx cert | Install certbot nginx plugin
+  become: true
+  ansible.builtin.apt:
+    name: python3-certbot-nginx
+    state: latest
+  notify: Nginx start
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Nginx cert | Create cert
+  become: True
+  ansible.builtin.command: certbot --nginx --test-cert -m {{ email }} --agree-tos -d {{ item }}.{{ my_domain }} --quiet --no-self-upgrade
+#  ansible.builtin.command: certbot --nginx -m {{ email }} --agree-tos -d {{ item }}.{{ my_domain }} --quiet --no-self-upgrade
+  with_items: "{{ domain_zones }}"
+  notify: Nginx reload

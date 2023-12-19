@@ -1,0 +1,18 @@
+---
+# Tasks for install mysql
+
+- name: Mysql install | Update apt cache
+  become: true
+  apt: 
+    update_cache: yes 
+    cache_valid_time: 3600
+  ignore_errors: true
+
+- name: Mysql install | Install server
+  become: true
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: latest
+  with_items:
+    - mysql-server
+    - python3-mysqldb

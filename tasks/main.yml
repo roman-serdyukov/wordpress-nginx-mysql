@@ -1,0 +1,20 @@
+---
+# tasks file for apps-server
+
+- name: Mysql | Get install packages
+  include_tasks: mysql.yml
+
+- name: Mysql create database | Create database and user for wordpress
+  include_tasks: database.yml
+
+- name: Install Nginx and congig
+  include_tasks: nginx.yml
+
+- name: Install php
+  include_tasks: php.yml
+
+- name: Install wordpress
+  include_tasks: wordpress.yml
+
+- name: Create certificates
+  include_tasks: certificate.yml

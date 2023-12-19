@@ -1,0 +1,26 @@
+---
+# Configure Mysql fo apps
+
+- name: Mysql configure | Create db
+  become: true
+  community.mysql.mysql_db:
+    name: '{{ mysql_db }}'
+    state: present
+  
+- name: Mysql configure | Create user for app
+  become: true
+  community.mysql.mysql_user:
+    name: '{{ mysql_user }}'
+    host: '%'
+    password: '{{ mysql_pass }}'
+    priv: '{{ mysql_db }}.*:ALL,GRANT'
+    state: present
+
+- name: Mysql configure | Enable login to mysql
+  become: true
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+#    line: 'bind-address = 0.0.0.0'
+    line: 'bind-address = localhost'
+    backup: yes
